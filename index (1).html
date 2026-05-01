@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Bureau of Digital Ethics</title>
+    <style>
+        :root {
+            --paper: #fdfdfd;
+            --ink: #1a1a1a;
+            --legal-blue: #2c3e50;
+            --gold: #96896d;
+            --error: #c0392b;
+        }
+
+        body {
+            background-color: #34495e;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+            color: var(--ink);
+        }
+
+        #accessGate {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 500px;
+            border-top: 10px solid var(--legal-blue);
+            margin-top: 10vh;
+        }
+
+        .gate-input {
+            display: block;
+            width: 80%;
+            margin: 15px auto;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        #errorMsg, #validationMsg {
+            color: var(--error);
+            font-size: 14px;
+            display: none;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #mainContent {
+            display: none;
+            background-color: var(--paper);
+            width: 100%;
+            max-width: 900px;
+            padding: 60px 80px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.4);
+            border: 1px solid #ddd;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px double var(--legal-blue);
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+        }
+
+        .name-field {
+            font-size: 20px;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+
+        .name-field input {
+            border: none;
+            border-bottom: 2px solid var(--ink);
+            width: 350px;
+            font-size: 20px;
+            outline: none;
+            padding-left: 10px;
+            background: transparent;
+        }
+
+        .scenario {
+            margin-bottom: 60px;
+            line-height: 1.6;
+        }
+
+        .scenario-title {
+            font-size: 22px;
+            color: var(--legal-blue);
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-bottom: 1px solid var(--gold);
+        }
+
+        .moral-test {
+            background: #f4f4f4;
+            padding: 20px;
+            border-left: 5px solid var(--gold);
+            margin-top: 15px;
+            font-style: italic;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 160px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            font-family: serif;
+            font-size: 16px;
+            resize: vertical;
+            box-sizing: border-box;
+            line-height: 1.5;
+        }
+
+        .instructions {
+            background: #f0f0f0;
+            padding: 25px;
+            margin-bottom: 40px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            line-height: 1.6;
+        }
+
+        .submit-btn {
+            background: var(--legal-blue);
+            color: white;
+            padding: 20px 40px;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .submit-btn:hover {
+            background: #1a252f;
+        }
+
+        #linkOutput {
+            margin-top: 25px;
+            padding: 25px;
+            background: #e8f6f3;
+            border: 2px solid #27ae60;
+            color: #1b5e20;
+            display: none;
+            word-break: break-all;
+            font-family: monospace;
+        }
+
+        #grading-badge {
+            display: none;
+            background: var(--gold);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="accessGate">
+        <h2 style="color: var(--legal-blue)">Security Clearance Verification</h2>
+        <p>You must type the three pillars of the CIA Triad correctly to access the assessment files.</p>
+        <div id="errorMsg">ACCESS DENIED: Authentication Failed. Check your spelling.</div>
+        <input type="text" id="c" class="gate-input" placeholder="First Pillar (C)">
+        <input type="text" id="i" class="gate-input" placeholder="Second Pillar (I)">
+        <input type="text" id="a" class="gate-input" placeholder="Third Pillar (A)">
+        <button class="submit-btn" onclick="verifyAccess()">VALIDATE & UNLOCK</button>
+    </div>
+
+    <div id="mainContent">
+        <div id="grading-badge">OFFICIAL ARCHIVE VIEW: READ-ONLY MODE</div>
+        <div class="header">
+            <h1 style="margin:0">OFFICIAL ETHICS ASSESSMENT</h1>
+            <p style="letter-spacing: 3px; font-size: 12px; margin-top: 10px;">NATIONAL BUREAU OF DIGITAL INTEGRITY</p>
+        </div>
+
+        <div class="name-field">
+            STUDENT NAME: <input type="text" id="studentName" placeholder="Full Legal Name Required">
+        </div>
+
+        <div class="instructions">
+            <strong>NOTICE:</strong> Before you begin, understand this: There are no "right" answers here. These scenarios are designed specifically to be difficult, forcing you to choose between two outcomes where someone always gets hurt. You aren't being graded on which "side" you pick. Instead, you are being graded on your ability to see the "Big Picture."
+            <br><br>
+            <strong>THE CHALLENGE:</strong> Even though each question focuses on one specific part of the CIA Triad, your answer must explain how your choice impacts all three (<strong>Confidentiality</strong>, <strong>Integrity</strong>, and <strong>Availability</strong>). You must provide at least <strong>three full sentences</strong> to prove that you understand how pulling one string in the triad affects the entire knot.
+        </div>
+
+        <div id="validationMsg">ERROR: All responses must meet the 3-sentence minimum requirement.</div>
+
+        <div class="scenario">
+            <div class="scenario-title">1. The Triage of the Vulnerable (Availability)</div>
+            <p><strong>The Scenario:</strong> A massive flood has hit your city. You are managing the Availability of the emergency rescue database, but the server is failing and can only support one neighborhood at a time. You must choose between a retirement community of 200 seniors or an apartment complex of 500 young families. Switching to one means the other goes offline, and those people will likely be missed by rescue boats.</p>
+            <div class="moral-test">
+                <strong>The Question:</strong> If you choose the 500 young people to maximize the number of lives saved, how do you justify the loss of Availability for the seniors? Furthermore, how does your choice to "play God" with the server impact the Integrity of the city's overall rescue record and the Confidentiality of the victims who are now left exposed in a failing system?
+            </div>
+            <textarea class="response" id="q1" placeholder="Minimum 3 sentences required..."></textarea>
+        </div>
+
+        <div class="scenario">
+            <div class="scenario-title">2. The Whistleblower’s Career (Confidentiality)</div>
+            <p><strong>The Scenario:</strong> You work in hospital IT and discover a Confidentiality breach: a world-famous surgeon is secretly struggling with a drug addiction that could lead to a fatal mistake. You only found this by "snooping" through files you weren't authorized to see. Reporting him stops the danger, but you will be fired and blacklisted for your own security violation.</p>
+            <div class="moral-test">
+                <strong>The Question:</strong> Is your moral obligation to save a life more important than the legal requirement of Confidentiality? If you stay silent to save your career, are you intentionally damaging the Integrity of the hospital’s safety ratings? How does your decision to report (or not) affect the Availability of safe healthcare for the public?
+            </div>
+            <textarea class="response" id="q2" placeholder="Minimum 3 sentences required..."></textarea>
+        </div>
+
+        <div class="scenario">
+            <div class="scenario-title">3. The Mercy Edit (Integrity)</div>
+            <p><strong>The Scenario:</strong> You manage the Integrity of the state’s criminal records. You find a "minor" felony on a single mother’s record from five years ago that is preventing her from getting a job to feed her children. You have the power to delete that entry and make her record "clean." No one will ever know you changed it.</p>
+            <div class="moral-test">
+                <strong>The Question:</strong> If you "fix" her record, you have personally destroyed the Integrity of the database—is that a crime, or an act of mercy? By doing this, are you compromising the Confidentiality of the original court ruling? How does your choice to prioritize this woman's life change the Availability of "true" information for future employers who rely on your system?
+            </div>
+            <textarea class="response" id="q3" placeholder="Minimum 3 sentences required..."></textarea>
+        </div>
+
+        <div class="scenario">
+            <div class="scenario-title">4. The Ransomware Sacrifice (Availability)</div>
+            <p><strong>The Scenario:</strong> Your school’s network is hit with ransomware, wiping out the Availability of all student files. The hackers demand $50,000 to unlock the data. The school only has that much money in the "Special Education" budget. Paying the ransom gets everyone’s college applications back, but the students with disabilities lose their support staff and tools for the rest of the year.</p>
+            <div class="moral-test">
+                <strong>The Question:</strong> Does the Availability of data for the majority of students outweigh the physical needs of the minority? If you pay, you get the data back, but can you ever trust the Integrity of that data again after it was held by criminals? Does paying the ransom invite more attacks, ultimately destroying the Confidentiality of every student's private record in the long run?
+            </div>
+            <textarea class="response" id="q4" placeholder="Minimum 3 sentences required..."></textarea>
+        </div>
+
+        <div class="scenario">
+            <div class="scenario-title">5. The Scapegoat (Integrity)</div>
+            <p><strong>The Scenario:</strong> A bank glitch ruins the Integrity of its accounts, accidentally deleting $10 million. Your mentor asks you to "re-write the logs" to blame a junior intern so the bank can claim insurance and pay the customers back. If you do it, 1,000 strangers get their money back. If you don't, the customers lose everything and the bank fails.</p>
+            <div class="moral-test">
+                <strong>The Question:</strong> Will you destroy an innocent person’s reputation by faking the Integrity of the logs to save the money of strangers? If you lie to get the insurance payout, have you permanently broken the Confidentiality and trust between the bank and its employees? Does the "greater good" of restoring Availability of funds for the customers justify becoming a person who manipulates the truth?
+            </div>
+            <textarea class="response" id="q5" placeholder="Minimum 3 sentences required..."></textarea>
+        </div>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitAssessment()">GENERATE SECURE TEACHER SUBMISSION LINK</button>
+        <div id="linkOutput"></div>
+    </div>
+
+    <script>
+        function verifyAccess() {
+            const c = document.getElementById('c').value.trim().toLowerCase();
+            const i = document.getElementById('i').value.trim().toLowerCase();
+            const a = document.getElementById('a').value.trim().toLowerCase();
+            if (c === "confidentiality" && i === "integrity" && a === "availability") {
+                document.getElementById('accessGate').style.display = "none";
+                document.getElementById('mainContent').style.display = "block";
+                window.scrollTo(0, 0);
+            } else {
+                document.getElementById('errorMsg').style.display = "block";
+            }
+        }
+
+        function countSentences(text) {
+            const sentences = text.trim().split(/[.!?]+\s*|$/).filter(s => s.trim().length > 5);
+            return sentences.length;
+        }
+
+        function submitAssessment() {
+            const student = document.getElementById('studentName').value.trim();
+            const responses = document.querySelectorAll('.response');
+            let allValid = true;
+
+            if (!student) { alert("Please enter your name."); return; }
+
+            responses.forEach(r => {
+                if (countSentences(r.value) < 3) {
+                    allValid = false;
+                    r.style.border = "2px solid var(--error)";
+                } else {
+                    r.style.border = "1px solid #ccc";
+                }
+            });
+
+            if (!allValid) {
+                document.getElementById('validationMsg').style.display = "block";
+                return;
+            }
+
+            // Encode Data
+            const data = {
+                name: student,
+                ans: Array.from(responses).map(r => r.value)
+            };
+
+            const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+            const finalLink = window.location.origin + window.location.pathname + "?case=" + encoded;
+
+            const output = document.getElementById('linkOutput');
+            output.style.display = "block";
+            output.innerHTML = "<strong>SUBMISSION GENERATED.</strong><br>Copy this unique URL and send it to your teacher:<br><br><input type='text' value='" + finalLink + "' style='width:100%; padding:8px; font-family:monospace;' onclick='this.select()'>";
+            document.getElementById('submitBtn').innerText = "LINK ENCRYPTED ✅";
+        }
+
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('case')) {
+                try {
+                    const data = JSON.parse(decodeURIComponent(escape(atob(params.get('case')))));
+                    document.getElementById('accessGate').style.display = "none";
+                    document.getElementById('mainContent').style.display = "block";
+                    document.getElementById('grading-badge').style.display = "block";
+                    document.getElementById('studentName').value = data.name;
+                    data.ans.forEach((val, index) => {
+                        document.getElementById('q' + (index + 1)).value = val;
+                    });
+                    document.querySelectorAll('textarea, input').forEach(el => el.readOnly = true);
+                    document.getElementById('submitBtn').style.display = "none";
+                } catch(e) { console.error("URL Corruption detected."); }
+            }
+        };
+    </script>
+</body>
+</html>
